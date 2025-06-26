@@ -18,7 +18,7 @@ const login = async (req, res) => {
     const { email, password } = req.body
     await verificarCredenciales(email, password)
 
-    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '30s' })
+    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '5m' })
 
     res.send({ token })
   } catch (error) {
