@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import { ENDPOINT } from '../config/constans'
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
@@ -19,6 +20,7 @@ const Register = () => {
 
   const handleForm = (event) => {
     event.preventDefault()
+
     const validarRut = (rut) => {
       rut = rut.replace(/\./g, '').replace('-', '')
       const cuerpo = rut.slice(0, -1)
@@ -33,8 +35,6 @@ const Register = () => {
       }
 
       const dvEsperado = 11 - (suma % 11)
-      dv = dv === 'K' ? 'K' : dv === '0' ? '0' : dv
-
       const dvFinal =
         dvEsperado === 11
           ? '0'
@@ -46,26 +46,51 @@ const Register = () => {
     }
 
     if (!user.email.trim() || !user.password.trim() || !user.rut.trim()) {
-      return window.alert('Todos los campos son obligatorios.')
+      return Swal.fire(
+        'Campos requeridos',
+        'Todos los campos son obligatorios.',
+        'warning'
+      )
     }
 
     if (!emailRegex.test(user.email)) {
-      return window.alert('El formato del email no es correcto!')
+      return Swal.fire(
+        'Formato inválido',
+        'El formato del email no es correcto.',
+        'error'
+      )
+    }
+
+    if (user.password.length < 6) {
+      return Swal.fire(
+        'Contraseña inválida',
+        'La contraseña debe tener al menos 6 caracteres.',
+        'warning'
+      )
     }
 
     if (!validarRut(user.rut)) {
-      return window.alert('El RUT ingresado no es válido.')
+      return Swal.fire(
+        'RUT inválido',
+        'El RUT ingresado no es válido.',
+        'error'
+      )
     }
 
     axios
       .post(ENDPOINT.users, user)
       .then(() => {
-        window.alert('Usuario registrado con éxito 😀.')
-        navigate('/login')
+        Swal.fire(
+          '¡Éxito!',
+          'Usuario registrado con éxito 😀.',
+          'success'
+        ).then(() => {
+          navigate('/login')
+        })
       })
       .catch(({ response: { data } }) => {
         console.error(data)
-        window.alert(`${data.message} 🙁.`)
+        Swal.fire('Error', `${data.message} 🙁.`, 'error')
       })
   }
 

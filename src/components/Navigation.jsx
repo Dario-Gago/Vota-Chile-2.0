@@ -52,7 +52,7 @@ const Navigation = () => {
 
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-white shadow-md">
-      <span className="text-2xl font-bold text-emerald-600">VC</span>
+      <span className="text-2xl font-bold text-emerald-600">VC.cl</span>
       <div className="flex items-center gap-3">
         <Link
           to="/"

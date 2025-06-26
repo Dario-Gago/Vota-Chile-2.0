@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import { ENDPOINT } from '../config/constans'
 import Context from '../contexts/Context'
 
@@ -19,24 +20,29 @@ const Login = () => {
     event.preventDefault()
 
     if (!user.email.trim() || !user.password.trim()) {
-      return window.alert('Email y password obligatorias.')
+      return Swal.fire('Error', 'Email y Contraseña obligatorias.', 'warning')
     }
 
     if (!emailRegex.test(user.email)) {
-      return window.alert('El formato del email no es correcto!')
+      return Swal.fire('Error', 'El formato del email no es correcto!', 'error')
     }
 
     axios
       .post(ENDPOINT.login, user)
       .then(({ data }) => {
         window.sessionStorage.setItem('token', data.token)
-        window.alert('Usuario identificado con éxito 😀.')
-        setDeveloper({})
-        navigate('/perfil')
+        Swal.fire(
+          '¡Éxito!',
+          'Usuario identificado con éxito 😀.',
+          'success'
+        ).then(() => {
+          setDeveloper({})
+          navigate('/perfil')
+        })
       })
       .catch(({ response: { data } }) => {
         console.error(data)
-        window.alert(`${data.message} 🙁.`)
+        Swal.fire('Error', `${data.message} 🙁.`, 'error')
       })
   }
 
