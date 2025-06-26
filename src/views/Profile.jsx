@@ -29,16 +29,6 @@ const Profile = () => {
         Bienvenido,{' '}
         <span className="text-emerald-500">{getDeveloper?.email}</span>
       </h1>
-      <h3 className="text-xl text-gray-600">
-        Rol:{' '}
-        <span className="font-semibold text-gray-800">{getDeveloper?.rol}</span>
-      </h3>
-      <h3 className="text-xl text-gray-600 mt-1">
-        Lenguaje:{' '}
-        <span className="font-semibold text-emerald-600">
-          {getDeveloper?.lenguage}
-        </span>
-      </h3>
     </div>
   )
 }

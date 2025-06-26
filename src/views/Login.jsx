@@ -5,7 +5,7 @@ import { ENDPOINT } from '../config/constans'
 import Context from '../contexts/Context'
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
-const initialForm = { email: 'docente@desafiolatam.com', password: '123456' }
+const initialForm = { email: 'prueba@ejemplo.com', password: '123456' }
 
 const Login = () => {
   const navigate = useNavigate()

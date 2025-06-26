@@ -5,10 +5,9 @@ import { ENDPOINT } from '../config/constans'
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 const initialForm = {
-  email: 'docente@desafiolatam.com',
+  email: 'prueba@ejemplo.com',
   password: '123456',
-  rol: 'Seleccione un rol',
-  lenguage: 'Seleccione un Lenguage'
+  rut: ''
 }
 
 const Register = () => {
@@ -20,18 +19,42 @@ const Register = () => {
 
   const handleForm = (event) => {
     event.preventDefault()
+    const validarRut = (rut) => {
+      rut = rut.replace(/\./g, '').replace('-', '')
+      const cuerpo = rut.slice(0, -1)
+      let dv = rut.slice(-1).toUpperCase()
 
-    if (
-      !user.email.trim() ||
-      !user.password.trim() ||
-      user.rol === 'Seleccione un rol' ||
-      user.lenguage === 'Seleccione un Lenguage'
-    ) {
+      let suma = 0
+      let multiplo = 2
+
+      for (let i = cuerpo.length - 1; i >= 0; i--) {
+        suma += parseInt(cuerpo.charAt(i)) * multiplo
+        multiplo = multiplo < 7 ? multiplo + 1 : 2
+      }
+
+      const dvEsperado = 11 - (suma % 11)
+      dv = dv === 'K' ? 'K' : dv === '0' ? '0' : dv
+
+      const dvFinal =
+        dvEsperado === 11
+          ? '0'
+          : dvEsperado === 10
+          ? 'K'
+          : dvEsperado.toString()
+
+      return dvFinal === dv
+    }
+
+    if (!user.email.trim() || !user.password.trim() || !user.rut.trim()) {
       return window.alert('Todos los campos son obligatorios.')
     }
 
     if (!emailRegex.test(user.email)) {
       return window.alert('El formato del email no es correcto!')
+    }
+
+    if (!validarRut(user.rut)) {
+      return window.alert('El RUT ingresado no es válido.')
     }
 
     axios
@@ -87,33 +110,15 @@ const Register = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-1">Rol</label>
-        <select
-          defaultValue={user.rol}
+        <label className="block text-gray-700 font-medium mb-1">RUT</label>
+        <input
+          value={user.rut}
           onChange={handleUser}
-          name="rol"
+          type="text"
+          name="rut"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
-        >
-          <option disabled>Seleccione un rol</option>
-          <option value="Full Stack Developer">Full Stack Developer</option>
-          <option value="Frontend Developer">Frontend Developer</option>
-          <option value="Backend Developer">Backend Developer</option>
-        </select>
-      </div>
-
-      <div className="mb-6">
-        <label className="block text-gray-700 font-medium mb-1">Lenguage</label>
-        <select
-          defaultValue={user.lenguage}
-          onChange={handleUser}
-          name="lenguage"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
-        >
-          <option disabled>Seleccione un Lenguage</option>
-          <option value="JavaScript">JavaScript</option>
-          <option value="Python">Python</option>
-          <option value="Ruby">Ruby</option>
-        </select>
+          placeholder="Ej: 21.796.387-7"
+        />
       </div>
 
       <button
