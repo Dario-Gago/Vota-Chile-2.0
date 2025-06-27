@@ -94,13 +94,6 @@ const Navigation = () => {
           {getDeveloper && (
             <>
               <Link
-                to="/amigos"
-                className="text-gray-700 hover:text-emerald-500 font-medium flex items-center gap-1"
-              >
-                Amigos
-                <i className="fa-solid fa-user-group ml-1" />
-              </Link>
-              <Link
                 to="/votar"
                 className="text-gray-700 hover:text-emerald-500 font-medium flex items-center gap-1"
               >
@@ -158,15 +151,6 @@ const Navigation = () => {
 
           {getDeveloper && (
             <>
-              <Link
-                to="/amigos"
-                className="text-gray-700 hover:text-emerald-500 font-medium flex items-center gap-2 py-2 border-b border-gray-100"
-                onClick={closeMenu}
-              >
-                <i className="fa-solid fa-user-group" />
-                Amigos
-              </Link>
-
               <Link
                 to="/votar"
                 className="text-gray-700 hover:text-emerald-500 font-medium flex items-center gap-2 py-2 border-b border-gray-100"

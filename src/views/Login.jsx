@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { ENDPOINT } from '../config/constans'
 import Context from '../contexts/Context'
+import { Link } from 'react-router-dom'
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 const initialForm = { email: 'prueba@ejemplo.com', password: '123456' }
@@ -87,6 +88,15 @@ const Login = () => {
       >
         Iniciar Sesión
       </button>
+      <p className="mt-4 text-center text-sm text-gray-600">
+        ¿No tienes cuenta?{' '}
+        <Link
+          to="/registrarse"
+          className="text-emerald-600 hover:underline font-medium"
+        >
+          Regístrate aquí
+        </Link>
+      </p>
     </form>
   )
 }
