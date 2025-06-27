@@ -18,7 +18,21 @@ const getUserByRut = async (rut) => {
   }
 }
 
-const registrarUsuario = async ({ email, password, rut, admin }) => {
+const getUserByNombreUsuario = async (nombre_usuario) => {
+  const query = 'SELECT * FROM usuarios WHERE nombre_usuario = $1'
+  const result = await pool.query(query, [nombre_usuario])
+  if (result.rows.length > 0) {
+    throw { code: 400, message: 'El nombre de usuario ya está en uso' }
+  }
+}
+
+const registrarUsuario = async ({
+  email,
+  password,
+  rut,
+  nombre_usuario,
+  admin
+}) => {
   const existeEmail = await pool.query(
     'SELECT * FROM usuarios WHERE email = $1',
     [email]
@@ -28,12 +42,18 @@ const registrarUsuario = async ({ email, password, rut, admin }) => {
   }
 
   await getUserByRut(rut) // ⬅️ Verifica si el RUT ya existe
+  await getUserByNombreUsuario(nombre_usuario) // ⬅️ Verifica si el nombre de usuario ya existe
 
   const hashedPassword = await bcrypt.hash(password, 10)
   const query =
-    'INSERT INTO usuarios (email, password, rut, admin) VALUES ($1, $2, $3, $4)'
-  const values = [email, hashedPassword, rut, admin]
+    'INSERT INTO usuarios (email, password, rut, nombre_usuario, admin) VALUES ($1, $2, $3, $4, $5)'
+  const values = [email, hashedPassword, rut, nombre_usuario, admin]
   await pool.query(query, values)
 }
 
-module.exports = { registrarUsuario, getUserByEmail, getUserByRut }
+module.exports = {
+  registrarUsuario,
+  getUserByEmail,
+  getUserByRut,
+  getUserByNombreUsuario
+}

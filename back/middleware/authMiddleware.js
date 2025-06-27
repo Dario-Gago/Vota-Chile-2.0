@@ -1,4 +1,3 @@
-// middlewares/authMiddleware.js
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = process.env.JWT_SECRET || 'az_AZ'
 
@@ -16,7 +15,7 @@ const verificarToken = (req, res, next) => {
 
   try {
     const payload = jwt.verify(token, JWT_SECRET)
-    req.email = payload.email // guardamos el email para usarlo después
+    req.user = payload // 👈 ahora podrás usar req.user.id o req.user.email
     next()
   } catch (error) {
     return res.status(401).json({ message: 'Token inválido o expirado' })

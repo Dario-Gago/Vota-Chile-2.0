@@ -9,32 +9,72 @@ const WelcomeSection = () => {
   const navigate = useNavigate()
   const { getDeveloper, setDeveloper } = useContext(Context)
   const [loading, setLoading] = useState(true)
-  const [isOnline, setIsOnline] = useState(true)
+  const [isOnline, setIsOnline] = useState(true) // Inicializar en false hasta obtener del backend
+  const [statusLoading, setStatusLoading] = useState(false)
 
-  const toggleOnlineStatus = () => {
-    setIsOnline((prev) => !prev)
+  // Función para obtener el status desde el backend
+  const getOnlineStatus = async () => {
+    const token = window.sessionStorage.getItem('token')
+    try {
+      const { data } = await axios.get(ENDPOINT.obtenerStatus, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setIsOnline(data.status || data) // Dependiendo de cómo devuelvas el dato
+    } catch (error) {
+      console.error('Error al obtener status:', error)
+      // Mantener el estado actual si hay error
+    }
   }
 
-  const getDeveloperData = () => {
+  // Función para cambiar el status (si tienes endpoint para actualizarlo)
+  const toggleOnlineStatus = async () => {
+    const token = window.sessionStorage.getItem('token')
+    setStatusLoading(true)
+
+    try {
+      const newStatus = !isOnline
+      // Asumiendo que tienes un endpoint para actualizar el status
+      await axios.put(
+        ENDPOINT.actualizarStatus,
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      setIsOnline(newStatus)
+    } catch (error) {
+      console.error('Error al actualizar status:', error)
+      // Podrías mostrar un mensaje de error al usuario aquí
+    } finally {
+      setStatusLoading(false)
+    }
+  }
+
+  const getDeveloperData = async () => {
     const token = window.sessionStorage.getItem('token')
     setLoading(true)
 
-    axios
-      .get(ENDPOINT.users, { headers: { Authorization: `Bearer ${token}` } })
-      .then(({ data: [user] }) => {
-        setDeveloper({ ...user })
-        setLoading(false)
+    try {
+      const {
+        data: [user]
+      } = await axios.get(ENDPOINT.users, {
+        headers: { Authorization: `Bearer ${token}` }
       })
-      .catch(({ response: { data } }) => {
-        console.error(data)
-        window.sessionStorage.removeItem('token')
-        setDeveloper(null)
-        navigate('/')
-        setLoading(false)
-      })
+      setDeveloper({ ...user })
+
+      // Obtener el status después de obtener los datos del usuario
+      await getOnlineStatus()
+    } catch ({ response: { data } }) {
+      console.error(data)
+      window.sessionStorage.removeItem('token')
+      setDeveloper(null)
+      navigate('/')
+    } finally {
+      setLoading(false)
+    }
   }
 
-  useEffect(getDeveloperData, [])
+  useEffect(() => {
+    getDeveloperData()
+  }, [])
 
   if (loading) {
     return (
@@ -48,6 +88,7 @@ const WelcomeSection = () => {
       </div>
     )
   }
+
   return (
     <div>
       {/* Welcome Section */}
@@ -63,31 +104,40 @@ const WelcomeSection = () => {
                       ¡Bienvenido de vuelta!
                     </h1>
                     <p className="text-blue-100 text-lg">
-                      {getDeveloper?.email}
+                      {getDeveloper?.nombre_usuario}
                     </p>
                   </div>
                 </div>
 
                 {/* Status Badge */}
-                <div className="hidden sm:block">
+                <div>
                   <button
                     onClick={toggleOnlineStatus}
-                    className={`transition-all duration-300 px-4 py-2 rounded-full border backdrop-blur-sm hover:scale-105 transform ${
+                    disabled={statusLoading}
+                    className={`transition-all duration-300 px-4 py-2 rounded-full border backdrop-blur-sm hover:scale-105 transform disabled:opacity-50 disabled:cursor-not-allowed ${
                       isOnline
                         ? 'bg-green-500 bg-opacity-90 border-green-400 hover:bg-green-600'
                         : 'bg-gray-500 bg-opacity-90 border-gray-400 hover:bg-gray-600'
                     }`}
                   >
                     <div className="flex items-center space-x-2">
-                      <div
-                        className={`w-2 h-2 rounded-full ${
-                          isOnline
-                            ? 'bg-green-200 animate-pulse'
-                            : 'bg-gray-200'
-                        }`}
-                      ></div>
+                      {statusLoading ? (
+                        <div className="w-2 h-2 rounded-full bg-white animate-spin border border-transparent border-t-current"></div>
+                      ) : (
+                        <div
+                          className={`w-2 h-2 rounded-full ${
+                            isOnline
+                              ? 'bg-green-200 animate-pulse'
+                              : 'bg-gray-200'
+                          }`}
+                        ></div>
+                      )}
                       <span className="text-white font-semibold text-sm">
-                        {isOnline ? 'En línea' : 'Inactivo'}
+                        {statusLoading
+                          ? 'Actualizando...'
+                          : isOnline
+                          ? 'En línea'
+                          : 'Inactivo'}
                       </span>
                     </div>
                   </button>

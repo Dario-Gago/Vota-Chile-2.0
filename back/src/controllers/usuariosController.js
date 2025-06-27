@@ -13,7 +13,7 @@ const crearUsuario = async (req, res) => {
 }
 const mostrarUsuario = async (req, res) => {
   try {
-    const usuario = await getUserByEmail(req.email)
+    const usuario = await getUserByEmail(req.user.email)
     // No devuelvas la contraseña
     delete usuario.password
     res.json([usuario])

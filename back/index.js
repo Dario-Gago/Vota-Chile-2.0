@@ -7,12 +7,14 @@ const PORT = process.env.PORT
 const usuariosRoutes = require('./routes/usuarios.routes')
 const authRoutes = require('./routes/auth.routes')
 const presidentesRoutes = require('./routes/presidentes.routes')
+const statusRoutes = require('./routes/status.routes')
 
 app.use(cors())
 app.use(express.json())
 app.use('/usuarios', usuariosRoutes)
 app.use('/login', authRoutes)
 app.use('/presidentes', presidentesRoutes)
+app.use('/status', statusRoutes)
 
 app.listen(
   PORT,

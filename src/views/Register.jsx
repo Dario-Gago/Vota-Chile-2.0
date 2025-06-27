@@ -5,10 +5,12 @@ import Swal from 'sweetalert2'
 import { ENDPOINT } from '../config/constans'
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
+const specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
 const initialForm = {
   email: 'prueba@ejemplo.com',
   password: '123456',
-  rut: ''
+  rut: '',
+  nombre_usuario: ''
 }
 
 const Register = () => {
@@ -45,7 +47,12 @@ const Register = () => {
       return dvFinal === dv
     }
 
-    if (!user.email.trim() || !user.password.trim() || !user.rut.trim()) {
+    if (
+      !user.email.trim() ||
+      !user.password.trim() ||
+      !user.rut.trim() ||
+      !user.nombre_usuario.trim()
+    ) {
       return Swal.fire(
         'Campos requeridos',
         'Todos los campos son obligatorios.',
@@ -61,18 +68,28 @@ const Register = () => {
       )
     }
 
-    if (user.password.length < 6) {
-      return Swal.fire(
-        'Contraseña inválida',
-        'La contraseña debe tener al menos 6 caracteres.',
-        'warning'
-      )
-    }
-
     if (!validarRut(user.rut)) {
       return Swal.fire(
         'RUT inválido',
         'El RUT ingresado no es válido.',
+        'error'
+      )
+    }
+
+    // Validación básica para nombre de usuario
+    if (user.nombre_usuario.length < 3) {
+      return Swal.fire(
+        'Nombre de usuario inválido',
+        'El nombre de usuario debe tener al menos 3 caracteres.',
+        'error'
+      )
+    }
+
+    // Validación para carácter especial en nombre de usuario
+    if (!specialCharRegex.test(user.nombre_usuario)) {
+      return Swal.fire(
+        'Nombre de usuario inválido',
+        'El nombre de usuario debe contener al menos un carácter especial (!@#$%^&*()_+-=[]{};\':"|,.<>/?)',
         'error'
       )
     }
@@ -120,6 +137,23 @@ const Register = () => {
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
           placeholder="Enter email"
         />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium mb-1">
+          Nombre de Usuario
+        </label>
+        <input
+          value={user.nombre_usuario}
+          onChange={handleUser}
+          type="text"
+          name="nombre_usuario"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          placeholder="Ej: juan_perez@"
+        />
+        <small className="text-gray-500 text-xs mt-1 block">
+          Debe contener al menos 3 caracteres y un carácter especial
+        </small>
       </div>
 
       <div className="mb-4">
