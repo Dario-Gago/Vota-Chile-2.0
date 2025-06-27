@@ -4,5 +4,6 @@ export const ENDPOINT = {
   presidentes: `${URLBASE}/presidentes`,
   users: `${URLBASE}/usuarios`,
   obtenerStatus: `${URLBASE}/status`, // GET
-  actualizarStatus: `${URLBASE}/status` // PUT
+  actualizarStatus: `${URLBASE}/status`, // PUT
+  votar: `${URLBASE}/votar`
 }

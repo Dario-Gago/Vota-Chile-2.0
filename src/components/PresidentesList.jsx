@@ -30,7 +30,7 @@ const PresidentesList = () => {
     try {
       const token = window.sessionStorage.getItem('token')
       await axios.post(
-        `${ENDPOINT.presidentes}/${presidenteId}/votar`,
+        `${ENDPOINT.votar}/${presidenteId}/votar`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` }

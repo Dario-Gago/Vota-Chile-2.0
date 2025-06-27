@@ -56,11 +56,19 @@ const actualizarStatusPorId = async (id, status) => {
     id
   ])
 }
+const getUserById = async (id) => {
+  const { rows } = await pool.query(
+    'SELECT id, nombre_usuario, email, rut, admin, status FROM usuarios WHERE id = $1',
+    [id]
+  )
+  return rows[0]
+}
 
 module.exports = {
   registrarUsuario,
   getUserByEmail,
   getUserByRut,
   getUserByNombreUsuario,
-  actualizarStatusPorId
+  actualizarStatusPorId,
+  getUserById
 }
