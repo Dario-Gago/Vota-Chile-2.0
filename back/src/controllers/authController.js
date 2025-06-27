@@ -32,7 +32,7 @@ const login = async (req, res) => {
         email: usuario.email
       },
       JWT_SECRET,
-      { expiresIn: '5m' }
+      { expiresIn: '10m' }
     )
 
     res.send({ token })
