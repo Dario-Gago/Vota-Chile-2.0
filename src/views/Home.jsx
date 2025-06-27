@@ -7,7 +7,6 @@ const Home = () => {
   // Simulación de carga de datos
   useEffect(() => {
     // Aquí iría tu lógica de getDeveloperData
-    console.log('Loading developer data...')
   }, [])
 
   return (

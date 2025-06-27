@@ -1,15 +1,15 @@
-// ProtectedRoute.jsx
 import { Navigate } from 'react-router-dom'
-import { useContext } from 'react'
-import Context from '../contexts/Context' // o donde tengas tu contexto de autenticación
 
 const ProtectedRoute = ({ children }) => {
-  const { token } = useContext(Context) // asumiendo que tienes un token en el contexto
+  const token = sessionStorage.getItem('token') // Obtener el token del localStorage
+  console.log('Token:', token) // Mostrar el token en la consola
 
-  if (!token) {
-    return <Navigate to="/perfil" replace />
+  // Si el token existe, redirige al perfil
+  if (token) {
+    return <Navigate to="/perfil" />
   }
 
+  // Si no hay token, permite ver el componente (Login o Registro)
   return children
 }
 
