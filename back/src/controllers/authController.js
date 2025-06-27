@@ -29,13 +29,14 @@ const login = async (req, res) => {
     const token = jwt.sign(
       {
         id: usuario.id,
-        email: usuario.email
+        email: usuario.email,
+        rut: usuario.rut
       },
       JWT_SECRET,
       { expiresIn: '10m' }
     )
 
-    res.send({ token })
+    res.send({ token, rut: usuario.rut })
   } catch (error) {
     console.error('Error en login:', error)
     res

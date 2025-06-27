@@ -31,12 +31,14 @@ const Login = () => {
       .post(ENDPOINT.login, user)
       .then(({ data }) => {
         window.sessionStorage.setItem('token', data.token)
+        window.sessionStorage.setItem('rut', data.rut) // ✅ Guardar el rut aquí
+
         Swal.fire(
           '¡Éxito!',
           'Usuario identificado con éxito 😀.',
           'success'
         ).then(() => {
-          setDeveloper({})
+          setDeveloper({}) // Aquí podrías incluso guardar más datos si lo deseas
           navigate('/perfil')
         })
       })
