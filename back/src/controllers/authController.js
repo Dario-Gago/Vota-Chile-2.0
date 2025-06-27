@@ -1,18 +1,20 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const { getUserByEmail } = require('../models/usuariosModel')
+const {
+  getUserByEmail,
+  actualizarStatusPorId
+} = require('../models/usuariosModel') // 👈 importa esta función
 require('dotenv').config()
 
 const JWT_SECRET = process.env.JWT_SECRET || 'az_AZ'
 
-// ✅ Ahora devuelve el usuario si la contraseña es válida
 const verificarCredenciales = async (email, password) => {
   const usuario = await getUserByEmail(email)
   const passwordValida = await bcrypt.compare(password, usuario.password)
   if (!passwordValida) {
     throw { code: 401, message: 'Credenciales incorrectas' }
   }
-  return usuario // 👈 importante
+  return usuario
 }
 
 const login = async (req, res) => {
@@ -20,11 +22,14 @@ const login = async (req, res) => {
     const { email, password } = req.body
     const usuario = await verificarCredenciales(email, password)
 
-    // ✅ Incluir id en el payload del token
+    // ✅ Cambiar status a true al loguearse
+    await actualizarStatusPorId(usuario.id, true)
+
+    // Generar el token con el ID del usuario
     const token = jwt.sign(
       {
-        id: usuario.id, // 👈 necesario para usar req.user.id
-        email: usuario.email // opcional
+        id: usuario.id,
+        email: usuario.email
       },
       JWT_SECRET,
       { expiresIn: '5m' }

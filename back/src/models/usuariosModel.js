@@ -50,10 +50,17 @@ const registrarUsuario = async ({
   const values = [email, hashedPassword, rut, nombre_usuario, admin]
   await pool.query(query, values)
 }
+const actualizarStatusPorId = async (id, status) => {
+  await pool.query('UPDATE usuarios SET status = $1 WHERE id = $2', [
+    status,
+    id
+  ])
+}
 
 module.exports = {
   registrarUsuario,
   getUserByEmail,
   getUserByRut,
-  getUserByNombreUsuario
+  getUserByNombreUsuario,
+  actualizarStatusPorId
 }

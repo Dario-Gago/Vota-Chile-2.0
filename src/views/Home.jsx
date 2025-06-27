@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react'
 import { ENDPOINT } from '../config/constans'
 
 const Home = () => {
-  const { developer, setDeveloper } = useContext(Context)
+  const { setDeveloper } = useContext(Context)
 
   const getDeveloperData = () => {
     const token = window.sessionStorage.getItem('token')

@@ -1,26 +1,39 @@
 import { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Context from '../contexts/Context'
+import { ENDPOINT } from '../config/constans'
+import axios from 'axios'
 
 const Navigation = () => {
   const navigate = useNavigate()
   const { getDeveloper, setDeveloper } = useContext(Context)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const logout = () => {
-    setDeveloper()
+  const logout = async () => {
+    setIsMenuOpen(false)
+    const token = window.sessionStorage.getItem('token')
+
+    try {
+      await axios.put(
+        ENDPOINT.actualizarStatus,
+        { status: false },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error)
+    }
+
     window.sessionStorage.removeItem('token')
+    setDeveloper(null)
     navigate('/')
-    setIsMenuOpen(false)
   }
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
-
-  const closeMenu = () => {
-    setIsMenuOpen(false)
-  }
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  const closeMenu = () => setIsMenuOpen(false)
 
   const renderAuthButtons = () => {
     if (!getDeveloper) {
@@ -77,6 +90,17 @@ const Navigation = () => {
             Inicio
             <i className="fa-solid fa-house ml-1" />
           </Link>
+
+          {getDeveloper && (
+            <Link
+              to="/amigos"
+              className="text-gray-700 hover:text-emerald-500 font-medium flex items-center gap-1"
+            >
+              Amigos
+              <i className="fa-solid fa-user-group ml-1" />
+            </Link>
+          )}
+
           {renderAuthButtons()}
         </div>
 
@@ -122,6 +146,18 @@ const Navigation = () => {
             <i className="fa-solid fa-house" />
             Inicio
           </Link>
+
+          {getDeveloper && (
+            <Link
+              to="/amigos"
+              className="text-gray-700 hover:text-emerald-500 font-medium flex items-center gap-2 py-2 border-b border-gray-100"
+              onClick={closeMenu}
+            >
+              <i className="fa-solid fa-user-group" />
+              Amigos
+            </Link>
+          )}
+
           <div className="space-y-3">{renderAuthButtons()}</div>
         </div>
       </div>
