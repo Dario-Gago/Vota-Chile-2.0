@@ -8,27 +8,63 @@ const PresidentesList = () => {
   const [loading, setLoading] = useState(true)
   const [votingId, setVotingId] = useState(null)
 
-  useEffect(() => {
-    const token = window.sessionStorage.getItem('token')
-    axios
-      .get(ENDPOINT.presidentes, {
+  // Función para obtener presidentes
+  const fetchPresidentes = async () => {
+    try {
+      const token = window.sessionStorage.getItem('token')
+      const { data } = await axios.get(ENDPOINT.presidentes, {
         headers: { Authorization: `Bearer ${token}` }
       })
-      .then(({ data }) => {
-        setPresidentes(data)
-        setLoading(false)
-      })
-      .catch((err) => {
+      setPresidentes(data)
+      setLoading(false)
+    } catch (err) {
+      if (loading) {
+        // Solo mostrar error si es la primera carga
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: err.response?.data?.message || 'Error al cargar presidentes'
         })
-        setLoading(false)
-      })
+      }
+      setLoading(false)
+      console.error('Error al obtener presidentes:', err)
+    }
+  }
+
+  useEffect(() => {
+    // Cargar datos inicialmente
+    fetchPresidentes()
+
+    // Configurar actualización automática cada 10 segundos
+    const interval = setInterval(() => {
+      fetchPresidentes()
+    }, 10000) // 10000ms = 10 segundos
+
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(interval)
   }, [])
 
   const handleVote = async (presidenteId) => {
+    // Encontrar el nombre del presidente para la confirmación
+    const presidente = presidentes.find((p) => p.id === presidenteId)
+
+    // Mostrar confirmación antes de votar
+    const result = await Swal.fire({
+      title: '¿Confirmar voto?',
+      text: `¿Estás seguro que quieres votar por ${presidente?.nombre}?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#10b981',
+      cancelButtonColor: '#ef4444',
+      confirmButtonText: 'Sí, votar',
+      cancelButtonText: 'Cancelar'
+    })
+
+    // Si el usuario cancela, no hacer nada
+    if (!result.isConfirmed) {
+      return
+    }
+
     setVotingId(presidenteId)
 
     try {
@@ -41,7 +77,7 @@ const PresidentesList = () => {
         }
       )
 
-      // Actualizar la lista después del voto
+      // Actualizar la lista después del voto (optimistic update)
       setPresidentes((prevPresidentes) =>
         prevPresidentes.map((presidente) =>
           presidente.id === presidenteId
@@ -58,6 +94,11 @@ const PresidentesList = () => {
         timerProgressBar: true,
         showConfirmButton: false
       })
+
+      // Actualizar datos inmediatamente después del voto para sincronizar
+      setTimeout(() => {
+        fetchPresidentes()
+      }, 1000)
     } catch (err) {
       Swal.fire({
         icon: 'error',
@@ -88,6 +129,10 @@ const PresidentesList = () => {
           <p className="text-lg text-gray-600">
             Vota por tu candidato preferido
           </p>
+          <div className="flex items-center justify-center mt-2 space-x-2">
+            <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm text-gray-500">Actualizando cada 10s</span>
+          </div>
           <div className="mt-4 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
         </div>
 
