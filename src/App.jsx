@@ -9,6 +9,7 @@ import Registro from './views/Register'
 import Login from './views/Login'
 import Perfil from './views/Profile'
 import FriendsSection from './views/FriendsSection'
+import Votar from './views/Votar'
 
 const App = () => {
   const globalState = useDeveloper()
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/amigos" element={<FriendsSection />} />
+          <Route path="/votar" element={<Votar />} />
         </Routes>
       </BrowserRouter>
     </Context.Provider>
