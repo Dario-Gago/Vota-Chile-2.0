@@ -7,7 +7,7 @@
   <a href="#white_check_mark-requisitos">Requisitos</a> &#xa0; | &#xa0;
   <a href="#checkered_flag-empezar">Empezar</a> &#xa0; | &#xa0;
   <a href="#memo-licencia">Licencia</a> &#xa0; | &#xa0;
-  <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">Autor</a>
+  <a href="https://github.com/Dario-Gago" target="_blank">Autor</a>
 </p>
 
 <br>
@@ -51,7 +51,7 @@ Antes de comenzar :checkered_flag:, necesitas tener instalados [Git](https://git
 
 ```bash
 # Clona este proyecto
-$ git clone https://github.com/{{YOUR_GITHUB_USERNAME}}/votachile-2-0
+$ git clone https://github.com/Dario-Gago/Vota-Chile-2.0.git
 
 # Entra al directorio del proyecto
 $ cd votachile-2-0
