@@ -1,13 +1,6 @@
 <h1 align="center">Votachile 2.0</h1>
 
 <p align="center">
-  <img alt="Lenguaje principal" src="https://img.shields.io/github/languages/top/{{YOUR_GITHUB_USERNAME}}/votachile-2-0?color=56BEB8">
-  <img alt="Cantidad de lenguajes" src="https://img.shields.io/github/languages/count/{{YOUR_GITHUB_USERNAME}}/votachile-2-0?color=56BEB8">
-  <img alt="Tamaño del repositorio" src="https://img.shields.io/github/repo-size/{{YOUR_GITHUB_USERNAME}}/votachile-2-0?color=56BEB8">
-  <img alt="Licencia" src="https://img.shields.io/github/license/{{YOUR_GITHUB_USERNAME}}/votachile-2-0?color=56BEB8">
-</p>
-
-<p align="center">
   <a href="#dart-acerca-de">Acerca de</a> &#xa0; | &#xa0;
   <a href="#sparkles-funcionalidades">Funcionalidades</a> &#xa0; | &#xa0;
   <a href="#rocket-tecnologías">Tecnologías</a> &#xa0; | &#xa0;
@@ -21,23 +14,34 @@
 
 ## :dart: Acerca de
 
-Describe aquí tu proyecto
+Vota chile es una plataforma innovadora diseñada para modernizar y facilitar el proceso electoral en Chile mediante la implementación del voto electrónico seguro y accesible. Nuestro objetivo es promover la participación ciudadana, garantizando transparencia, privacidad y confiabilidad en cada votación.
+
+Con esta iniciativa, buscamos:
+
+Facilitar el acceso al voto para todos los ciudadanos, eliminando barreras geográficas y logísticas.
+
+Incrementar la participación electoral, especialmente entre jóvenes y personas con dificultades para acudir a centros de votación físicos.
+
+Implementar sistemas robustos de autenticación y cifrado para proteger la identidad y el voto de cada usuario.
+
+Ofrecer una experiencia intuitiva y amigable que permita emitir el voto de manera rápida y segura desde cualquier dispositivo conectado a internet.
+
+Voto en Línea Chile es un proyecto que apuesta por el futuro de la democracia digital en el país, contribuyendo a fortalecer la confianza en los procesos electorales y adaptándolos a las nuevas tecnologías y necesidades sociales.
 
 ## :sparkles: Funcionalidades
 
-:heavy_check_mark: Funcionalidad 1;\
-:heavy_check_mark: Funcionalidad 2;\
-:heavy_check_mark: Funcionalidad 3;
+:heavy_check_mark: El administrador puede crear una fecha de lanzamiento de votos;\
+:heavy_check_mark: El administrador puede crear y eliminar un presidente;\
+:heavy_check_mark: El usuario puede votar;
 
 ## :rocket: Tecnologías
 
 Las siguientes herramientas fueron utilizadas en este proyecto:
 
-- [Expo](https://expo.io/)
+- [Javasript](https://es.wikipedia.org/wiki/JavaScript)
 - [Node.js](https://nodejs.org/en/)
+- [PostgresSQL](https://www.postgresql.org/)
 - [React](https://es.reactjs.org/)
-- [React Native](https://reactnative.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
 
 ## :white_check_mark: Requisitos
 
@@ -53,10 +57,16 @@ $ git clone https://github.com/{{YOUR_GITHUB_USERNAME}}/votachile-2-0
 $ cd votachile-2-0
 
 # Instala las dependencias
-$ yarn
+$ npm install
 
 # Ejecuta el proyecto
-$ yarn start
+$ npm run dev
+
+# Entra en el directorio del backend
+$ cd  back/
+
+# Ejecuta el servidor
+$ npm start
 
 # El servidor se iniciará en <http://localhost:3000>
 ```
