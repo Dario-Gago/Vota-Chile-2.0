@@ -12,8 +12,7 @@ import Registro from './views/Register'
 import Login from './views/Login'
 import Perfil from './views/Profile'
 import Votar from './views/Votar'
-import ProtectedRoute from './components/ProtectedRoute'
-
+import ProtectedRouteHome from './components/ProtectedRouteHome'
 const App = () => {
   const globalState = useDeveloper()
 
@@ -39,17 +38,17 @@ const App = () => {
           <Route
             path="/registrarse"
             element={
-              <ProtectedRoute>
+              <ProtectedRouteHome>
                 <Registro />
-              </ProtectedRoute>
+              </ProtectedRouteHome>
             }
           />
           <Route
             path="/login"
             element={
-              <ProtectedRoute>
+              <ProtectedRouteHome>
                 <Login />
-              </ProtectedRoute>
+              </ProtectedRouteHome>
             }
           />
           <Route path="/perfil" element={<Perfil />} />

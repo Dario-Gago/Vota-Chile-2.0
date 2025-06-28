@@ -66,16 +66,8 @@ const MisVotos = () => {
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-100 flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold text-gray-800 text-center mb-2">
-            Error
-          </h2>
+
           <p className="text-gray-600 text-center mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
-          >
-            Reintentar
-          </button>
         </div>
       </div>
     )
