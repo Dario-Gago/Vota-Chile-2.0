@@ -129,10 +129,7 @@ const PresidentesList = () => {
           <p className="text-lg text-gray-600">
             Vota por tu candidato preferido
           </p>
-          <div className="flex items-center justify-center mt-2 space-x-2">
-            <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm text-gray-500">Actualizando cada 10s</span>
-          </div>
+
           <div className="mt-4 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
         </div>
 

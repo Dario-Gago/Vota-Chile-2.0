@@ -44,7 +44,7 @@ const getVotosPorRut = async (req, res) => {
     const votos = await obtenerVotosPorRut(rut)
 
     if (votos.length === 0) {
-      return res.status(404).json({ message: 'Tienes que votar' })
+      return res.status(404).json({ message: 'No has votado' })
     }
 
     return res.json(votos)

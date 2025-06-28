@@ -114,7 +114,7 @@ const WelcomeSection = () => {
                   <button
                     onClick={toggleOnlineStatus}
                     disabled={statusLoading}
-                    className={`transition-all duration-300 px-4 py-2 rounded-full border backdrop-blur-sm hover:scale-105 transform disabled:opacity-50 disabled:cursor-not-allowed ${
+                    className={`w-[120px] md:w-auto transition-all duration-300 px-4 py-2 rounded-full border backdrop-blur-sm hover:scale-105 transform disabled:opacity-50 disabled:cursor-not-allowed ${
                       isOnline
                         ? 'bg-green-500 bg-opacity-90 border-green-400 hover:bg-green-600'
                         : 'bg-gray-500 bg-opacity-90 border-gray-400 hover:bg-gray-600'

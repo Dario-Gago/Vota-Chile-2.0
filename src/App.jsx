@@ -15,7 +15,6 @@ import Votar from './views/Votar'
 import ProtectedRouteHome from './components/ProtectedRouteHome'
 const App = () => {
   const globalState = useDeveloper()
-
   useEffect(() => {
     const token = window.sessionStorage.getItem('token')
     if (token) {
