@@ -6,7 +6,6 @@
   <a href="#rocket-tecnologías">Tecnologías</a> &#xa0; | &#xa0;
   <a href="#white_check_mark-requisitos">Requisitos</a> &#xa0; | &#xa0;
   <a href="#checkered_flag-empezar">Empezar</a> &#xa0; | &#xa0;
-  <a href="#memo-licencia">Licencia</a> &#xa0; | &#xa0;
   <a href="https://github.com/Dario-Gago" target="_blank">Autor</a>
 </p>
 
