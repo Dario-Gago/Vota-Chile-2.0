@@ -64,11 +64,16 @@ const getUserById = async (id) => {
   return rows[0]
 }
 
+const setUserStatusFalse = async (userId) => {
+  await pool.query('UPDATE usuarios SET status = false WHERE id = $1', [userId])
+}
+
 module.exports = {
   registrarUsuario,
   getUserByEmail,
   getUserByRut,
   getUserByNombreUsuario,
   actualizarStatusPorId,
-  getUserById
+  getUserById,
+  setUserStatusFalse
 }

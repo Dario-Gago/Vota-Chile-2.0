@@ -14,10 +14,13 @@ import Perfil from './views/Profile'
 import Votar from './views/Votar'
 import ProtectedRouteHome from './components/ProtectedRouteHome'
 import ProtectedRouteVotar from './components/ProtectedRouteVotar'
+
 const App = () => {
   const globalState = useDeveloper()
+
   useEffect(() => {
     const token = window.sessionStorage.getItem('token')
+
     if (token) {
       axios
         .get(ENDPOINT.users, { headers: { Authorization: `Bearer ${token}` } })
@@ -26,6 +29,23 @@ const App = () => {
           window.sessionStorage.removeItem('token')
           globalState.setDeveloper(null)
         })
+    }
+
+    // Detectar cierre de pestaña/ventana
+    const handleBeforeUnload = () => {
+      const token = window.sessionStorage.getItem('token')
+      if (token) {
+        navigator.sendBeacon(
+          `${ENDPOINT.logoutAuto}`,
+          JSON.stringify({ token })
+        )
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
     }
   }, [])
 

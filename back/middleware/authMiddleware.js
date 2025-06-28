@@ -25,9 +25,7 @@ const verificarToken = async (req, res, next) => {
         const userId = decoded?.id
         if (userId) {
           await actualizarStatusPorId(userId, false) // 👈 Aquí actualizas el status
-          console.log(
-            `Token expirado. Status actualizado para usuario ${userId}`
-          )
+          console.log(`Recarga la página ${userId}`)
         }
       } catch (e) {
         console.error('Error actualizando status al expirar el token:', e)
