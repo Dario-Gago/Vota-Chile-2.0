@@ -6,19 +6,40 @@ import { ENDPOINT } from '../config/constans'
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 const specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
+
 const initialForm = {
-  email: 'prueba@ejemplo.com',
-  password: '123456',
+  email: '',
+  password: '',
   rut: '',
   nombre_usuario: ''
+}
+
+// ✅ NUEVA FUNCIÓN para formatear el RUT como 12.345.678-9
+const formatearRut = (valor) => {
+  valor = valor.replace(/[^0-9kK]/g, '').toUpperCase()
+
+  let cuerpo = valor.slice(0, -1)
+  let dv = valor.slice(-1)
+
+  let cuerpoFormateado = ''
+  while (cuerpo.length > 3) {
+    cuerpoFormateado = '.' + cuerpo.slice(-3) + cuerpoFormateado
+    cuerpo = cuerpo.slice(0, -3)
+  }
+  cuerpoFormateado = cuerpo + cuerpoFormateado
+
+  return cuerpoFormateado + '-' + dv
 }
 
 const Register = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState(initialForm)
 
-  const handleUser = (event) =>
-    setUser({ ...user, [event.target.name]: event.target.value })
+  const handleUser = (event) => {
+    const { name, value } = event.target
+    const newValue = name === 'rut' ? formatearRut(value) : value
+    setUser({ ...user, [name]: newValue })
+  }
 
   const handleForm = (event) => {
     event.preventDefault()
@@ -76,7 +97,6 @@ const Register = () => {
       )
     }
 
-    // Validación básica para nombre de usuario
     if (user.nombre_usuario.length < 3) {
       return Swal.fire(
         'Nombre de usuario inválido',
@@ -85,11 +105,10 @@ const Register = () => {
       )
     }
 
-    // Validación para carácter especial en nombre de usuario
     if (!specialCharRegex.test(user.nombre_usuario)) {
       return Swal.fire(
         'Nombre de usuario inválido',
-        'El nombre de usuario debe contener al menos un carácter especial (!@#$%^&*()_+-=[]{};\':"|,.<>/?)',
+        'Debe contener al menos un carácter especial (!@#$%^&*)',
         'error'
       )
     }
@@ -135,7 +154,7 @@ const Register = () => {
           type="email"
           name="email"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          placeholder="Enter email"
+          placeholder="Ingrese su email"
         />
       </div>
 
@@ -157,14 +176,16 @@ const Register = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-1">Password</label>
+        <label className="block text-gray-700 font-medium mb-1">
+          Contraseña
+        </label>
         <input
           value={user.password}
           onChange={handleUser}
           type="password"
           name="password"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          placeholder="Password"
+          placeholder="Ingrese una contraseña"
         />
       </div>
 
@@ -175,8 +196,9 @@ const Register = () => {
           onChange={handleUser}
           type="text"
           name="rut"
+          maxLength={12}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          placeholder="Ej: 21.796.387-7"
+          placeholder="Ej: 12.345.678-9"
         />
       </div>
 

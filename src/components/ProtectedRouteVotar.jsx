@@ -2,9 +2,7 @@ import { Navigate } from 'react-router-dom'
 
 const ProtectedRouteVotar = ({ children }) => {
   const token = sessionStorage.getItem('token') // Obtener el token del localStorage
-  console.log('Token:', token) // Mostrar el token en la consola
 
-  // Si el token existe, redirige al perfil
   if (!token) {
     return <Navigate to="/" />
   }

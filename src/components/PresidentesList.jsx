@@ -5,10 +5,25 @@ import Swal from 'sweetalert2'
 
 const PresidentesList = () => {
   const [presidentes, setPresidentes] = useState([])
+  const [ediciones, setEdiciones] = useState({})
   const [loading, setLoading] = useState(true)
   const [votingId, setVotingId] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(false)
 
-  // Función para obtener presidentes
+  const obtenerRolUsuario = async () => {
+    try {
+      const token = window.sessionStorage.getItem('token')
+      const { data } = await axios.get(`${ENDPOINT.users}/info`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setIsAdmin(data.admin) // <-- Aquí se actualiza el valor real
+    } catch (err) {
+      console.error('Error al obtener info del usuario', err)
+    }
+  }
+
+  // Simulación de rol
+
   const fetchPresidentes = async () => {
     try {
       const token = window.sessionStorage.getItem('token')
@@ -16,10 +31,17 @@ const PresidentesList = () => {
         headers: { Authorization: `Bearer ${token}` }
       })
       setPresidentes(data)
+
+      // Inicializar campos editables
+      const inicial = {}
+      data.forEach((p) => {
+        inicial[p.id] = { nombre: p.nombre, descripcion: p.descripcion }
+      })
+      setEdiciones(inicial)
+
       setLoading(false)
     } catch (err) {
       if (loading) {
-        // Solo mostrar error si es la primera carga
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -32,23 +54,14 @@ const PresidentesList = () => {
   }
 
   useEffect(() => {
-    // Cargar datos inicialmente
     fetchPresidentes()
-
-    // Configurar actualización automática cada 10 segundos
-    const interval = setInterval(() => {
-      fetchPresidentes()
-    }, 10000) // 10000ms = 10 segundos
-
-    // Limpiar el intervalo cuando el componente se desmonte
+    obtenerRolUsuario()
+    const interval = setInterval(fetchPresidentes, 10000)
     return () => clearInterval(interval)
   }, [])
 
   const handleVote = async (presidenteId) => {
-    // Encontrar el nombre del presidente para la confirmación
     const presidente = presidentes.find((p) => p.id === presidenteId)
-
-    // Mostrar confirmación antes de votar
     const result = await Swal.fire({
       title: '¿Confirmar voto?',
       text: `¿Estás seguro que quieres votar por ${presidente?.nombre}?`,
@@ -60,10 +73,7 @@ const PresidentesList = () => {
       cancelButtonText: 'Cancelar'
     })
 
-    // Si el usuario cancela, no hacer nada
-    if (!result.isConfirmed) {
-      return
-    }
+    if (!result.isConfirmed) return
 
     setVotingId(presidenteId)
 
@@ -77,12 +87,9 @@ const PresidentesList = () => {
         }
       )
 
-      // Actualizar la lista después del voto (optimistic update)
-      setPresidentes((prevPresidentes) =>
-        prevPresidentes.map((presidente) =>
-          presidente.id === presidenteId
-            ? { ...presidente, votos: presidente.votos + 1 }
-            : presidente
+      setPresidentes((prev) =>
+        prev.map((p) =>
+          p.id === presidenteId ? { ...p, votos: p.votos + 1 } : p
         )
       )
 
@@ -91,14 +98,10 @@ const PresidentesList = () => {
         title: 'Voto registrado',
         text: 'Gracias por votar por tu candidato preferido!',
         timer: 2000,
-        timerProgressBar: true,
         showConfirmButton: false
       })
 
-      // Actualizar datos inmediatamente después del voto para sincronizar
-      setTimeout(() => {
-        fetchPresidentes()
-      }, 1000)
+      setTimeout(fetchPresidentes, 1000)
     } catch (err) {
       Swal.fire({
         icon: 'error',
@@ -107,6 +110,30 @@ const PresidentesList = () => {
       })
     } finally {
       setVotingId(null)
+    }
+  }
+
+  const handleUpdate = async (id) => {
+    const { nombre, descripcion } = ediciones[id]
+    try {
+      const token = window.sessionStorage.getItem('token')
+      await axios.put(
+        `${ENDPOINT.presidentes}/${id}`,
+        { nombre, descripcion },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      Swal.fire('Actualizado', 'Presidente actualizado', 'success')
+      fetchPresidentes()
+    } catch (err) {
+      Swal.fire(
+        'Error',
+        err.response?.data?.message || 'No se pudo actualizar',
+        'error'
+      )
     }
   }
 
@@ -120,40 +147,72 @@ const PresidentesList = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+      <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Elecciones Presidenciales
           </h1>
           <p className="text-lg text-gray-600">
-            Vota por tu candidato preferido
+            {isAdmin ? 'Panel de administración' : 'Vota por tu candidato'}
           </p>
-
           <div className="mt-4 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
         </div>
 
-        {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {presidentes.map(({ id, nombre, descripcion, votos }) => (
+          {presidentes.map((p) => (
             <div
-              key={id}
+              key={p.id}
               className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
             >
-              {/* Card Header */}
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
                 <h3 className="text-xl font-bold text-white text-center">
-                  {nombre}
+                  {p.nombre}
                 </h3>
               </div>
 
-              {/* Card Body */}
               <div className="p-6">
-                <p className="text-gray-600 text-sm leading-relaxed mb-6 min-h-[60px]">
-                  {descripcion}
-                </p>
+                {isAdmin ? (
+                  <>
+                    <input
+                      type="text"
+                      value={ediciones[p.id]?.nombre || ''}
+                      onChange={(e) =>
+                        setEdiciones({
+                          ...ediciones,
+                          [p.id]: {
+                            ...ediciones[p.id],
+                            nombre: e.target.value
+                          }
+                        })
+                      }
+                      className="w-full border rounded px-2 py-1 mb-3"
+                    />
+                    <textarea
+                      value={ediciones[p.id]?.descripcion || ''}
+                      onChange={(e) =>
+                        setEdiciones({
+                          ...ediciones,
+                          [p.id]: {
+                            ...ediciones[p.id],
+                            descripcion: e.target.value
+                          }
+                        })
+                      }
+                      className="w-full border rounded px-2 py-1 mb-3"
+                    />
+                    <button
+                      onClick={() => handleUpdate(p.id)}
+                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4 w-full"
+                    >
+                      Guardar
+                    </button>
+                  </>
+                ) : (
+                  <p className="text-gray-600 text-sm leading-relaxed mb-6 min-h-[60px]">
+                    {p.descripcion}
+                  </p>
+                )}
 
-                {/* Votos Counter */}
                 <div className="flex items-center justify-center mb-6">
                   <div className="bg-gray-100 rounded-full px-4 py-2 flex items-center space-x-2">
                     <svg
@@ -164,43 +223,44 @@ const PresidentesList = () => {
                       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span className="font-semibold text-gray-700">
-                      {votos.toLocaleString()} votos
+                      {p.votos.toLocaleString()} votos
                     </span>
                   </div>
                 </div>
 
-                {/* Vote Button */}
-                <button
-                  onClick={() => handleVote(id)}
-                  disabled={votingId === id}
-                  className={`w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200 ${
-                    votingId === id
-                      ? 'bg-gray-400 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 active:scale-95 shadow-md hover:shadow-lg'
-                  }`}
-                >
-                  {votingId === id ? (
-                    <div className="flex items-center justify-center space-x-2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      <span>Votando...</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center space-x-2">
-                      <svg
-                        className="h-5 w-5"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span>Votar</span>
-                    </div>
-                  )}
-                </button>
+                {!isAdmin && (
+                  <button
+                    onClick={() => handleVote(p.id)}
+                    disabled={votingId === p.id}
+                    className={`w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200 ${
+                      votingId === p.id
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 active:scale-95 shadow-md hover:shadow-lg'
+                    }`}
+                  >
+                    {votingId === p.id ? (
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        <span>Votando...</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center space-x-2">
+                        <svg
+                          className="h-5 w-5"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span>Votar</span>
+                      </div>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           ))}

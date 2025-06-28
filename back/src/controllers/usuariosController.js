@@ -1,4 +1,8 @@
-const { registrarUsuario, getUserByEmail } = require('../models/usuariosModel')
+const {
+  registrarUsuario,
+  getUserByEmail,
+  getUserById
+} = require('../models/usuariosModel')
 
 const crearUsuario = async (req, res) => {
   try {
@@ -23,4 +27,20 @@ const mostrarUsuario = async (req, res) => {
       .json({ message: error.message || 'Error al obtener usuario' })
   }
 }
-module.exports = { crearUsuario, mostrarUsuario }
+const obtenerInfoUsuario = async (req, res) => {
+  try {
+    const usuario = await getUserById(req.user.id)
+
+    if (!usuario) {
+      return res.status(404).json({ message: 'Usuario no encontrado' })
+    }
+
+    res.json(usuario)
+  } catch (error) {
+    console.error(error)
+    res
+      .status(500)
+      .json({ message: 'Error al obtener información del usuario' })
+  }
+}
+module.exports = { crearUsuario, mostrarUsuario, obtenerInfoUsuario }

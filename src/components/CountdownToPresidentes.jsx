@@ -6,7 +6,7 @@ const CountdownToPresidentes = () => {
   const [finished, setFinished] = useState(false)
 
   const calculateTimeLeft = () => {
-    const targetDate = new Date('2025-06-28T00:07:40')
+    const targetDate = new Date('2025-06-28T15:11:40')
     const now = new Date()
     const difference = targetDate - now
 
