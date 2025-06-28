@@ -9,6 +9,7 @@ const {
 const verificarToken = require('../middleware/authMiddleware')
 router.get('/', verificarToken, obtenerPresidentes)
 router.put('/:id', verificarToken, updatePresidente)
+router.delete('/:id', verificarToken, eliminarPresidenteController)
 router.delete('/', verificarToken, eliminarTodosPresidentes)
 
 module.exports = router
