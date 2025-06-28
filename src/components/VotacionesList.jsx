@@ -2,15 +2,14 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { ENDPOINT } from '../config/constans'
 import Swal from 'sweetalert2'
-
 const VotacionesList = () => {
   const [presidentes, setPresidentes] = useState([])
   const [ediciones, setEdiciones] = useState({})
   const [loading, setLoading] = useState(true)
   const [votingId, setVotingId] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
-  const [nombreTabla, setNombreTabla] = useState('')
-
+  const [titulo, setTitulo] = useState('')
+  const [nuevoTitulo, setNuevoTitulo] = useState('')
   const obtenerRolUsuario = async () => {
     try {
       const token = window.sessionStorage.getItem('token')
@@ -29,11 +28,10 @@ const VotacionesList = () => {
       const { data } = await axios.get(ENDPOINT.presidentes, {
         headers: { Authorization: `Bearer ${token}` }
       })
-      // Suponiendo data tiene { nombreTabla, presidentes }
-      setNombreTabla(data.nombreTabla || 'Elecciones Presidenciales')
-      setPresidentes(data.presidentes || data) // si no viene presidentes, toma data como array
-      // inicializar ediciones igual que antes, usando data.presidentes si existe
+      // Solo usamos los presidentes
       const listaPresidentes = data.presidentes || data
+      setPresidentes(listaPresidentes)
+
       const inicial = {}
       listaPresidentes.forEach((p) => {
         inicial[p.id] = { nombre: p.nombre, descripcion: p.descripcion }
@@ -56,9 +54,41 @@ const VotacionesList = () => {
   useEffect(() => {
     fetchPresidentes()
     obtenerRolUsuario()
+    obtenerTitulo()
+
     const interval = setInterval(fetchPresidentes, 10000)
     return () => clearInterval(interval)
   }, [])
+
+  const obtenerTitulo = async () => {
+    try {
+      const { data } = await axios.get(ENDPOINT.titulo)
+      setTitulo(data.titulo)
+      setNuevoTitulo(data.titulo)
+    } catch (error) {
+      console.error('Error al obtener título', error)
+    }
+  }
+  const actualizarTitulo = async () => {
+    try {
+      const token = window.sessionStorage.getItem('token')
+      const { data } = await axios.put(
+        ENDPOINT.titulo,
+        { titulo: nuevoTitulo },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      )
+      setTitulo(data.titulo)
+      Swal.fire('Actualizado', 'El título fue actualizado', 'success')
+    } catch (err) {
+      Swal.fire(
+        'Error',
+        err.response?.data?.message || 'No se pudo actualizar el título',
+        'error'
+      )
+    }
+  }
 
   const handleVote = async (presidenteId) => {
     const presidente = presidentes.find((p) => p.id === presidenteId)
@@ -219,12 +249,28 @@ const VotacionesList = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            {nombreTabla}
-          </h1>
           <p className="text-lg text-gray-600">
             {isAdmin ? 'Panel de administración' : 'Vota por tu candidato'}
           </p>
+          {isAdmin ? (
+            <div className="mb-4">
+              <input
+                type="text"
+                value={nuevoTitulo}
+                placeholder="Ingrese un tíulo"
+                onChange={(e) => setNuevoTitulo(e.target.value)}
+                className="text-4xl font-bold text-center w-full border-b-2 border-blue-500 focus:outline-none focus:border-blue-700"
+              />
+              <button
+                onClick={actualizarTitulo}
+                className="mt-2 bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
+              >
+                Guardar Título
+              </button>
+            </div>
+          ) : (
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">{titulo}</h1>
+          )}
 
           {/* BOTÓN ELIMINAR TODOS - SOLO ADMIN */}
           {isAdmin && (

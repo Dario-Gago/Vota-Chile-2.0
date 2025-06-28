@@ -7,5 +7,6 @@ export const ENDPOINT = {
   actualizarStatus: `${URLBASE}/status`, // PUT
   votar: `${URLBASE}/votar`,
   misVotos: (rut) => `${URLBASE}/votar/${rut}`,
-  logoutAuto: `${URLBASE}/logout-auto`
+  logoutAuto: `${URLBASE}/logout-auto`,
+  titulo: `${URLBASE}/api/titulo`
 }
