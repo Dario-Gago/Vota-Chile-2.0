@@ -13,8 +13,18 @@ const actualizarPresidente = async (id, nombre, descripcion) => {
   )
   return result
 }
-
+const eliminarPresidente = async (id) => {
+  const query = 'DELETE FROM presidentes WHERE id = $1 RETURNING *'
+  const { rows } = await pool.query(query, [id])
+  return rows[0] // devuelve el presidente eliminado o undefined si no existe
+}
+const deleteAllPresidentes = async () => {
+  const query = 'DELETE FROM presidentes' // elimina todas las filas
+  await pool.query(query)
+}
 module.exports = {
   getAllPresidentes,
-  actualizarPresidente
+  actualizarPresidente,
+  eliminarPresidente,
+  deleteAllPresidentes
 }

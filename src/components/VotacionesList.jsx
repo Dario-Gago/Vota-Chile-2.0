@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react'
 import { ENDPOINT } from '../config/constans'
 import Swal from 'sweetalert2'
 
-const PresidentesList = () => {
+const VotacionesList = () => {
   const [presidentes, setPresidentes] = useState([])
   const [ediciones, setEdiciones] = useState({})
   const [loading, setLoading] = useState(true)
   const [votingId, setVotingId] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [nombreTabla, setNombreTabla] = useState('')
 
   const obtenerRolUsuario = async () => {
     try {
@@ -16,13 +17,11 @@ const PresidentesList = () => {
       const { data } = await axios.get(`${ENDPOINT.users}/info`, {
         headers: { Authorization: `Bearer ${token}` }
       })
-      setIsAdmin(data.admin) // <-- Aquí se actualiza el valor real
+      setIsAdmin(data.admin)
     } catch (err) {
       console.error('Error al obtener info del usuario', err)
     }
   }
-
-  // Simulación de rol
 
   const fetchPresidentes = async () => {
     try {
@@ -30,15 +29,16 @@ const PresidentesList = () => {
       const { data } = await axios.get(ENDPOINT.presidentes, {
         headers: { Authorization: `Bearer ${token}` }
       })
-      setPresidentes(data)
-
-      // Inicializar campos editables
+      // Suponiendo data tiene { nombreTabla, presidentes }
+      setNombreTabla(data.nombreTabla || 'Elecciones Presidenciales')
+      setPresidentes(data.presidentes || data) // si no viene presidentes, toma data como array
+      // inicializar ediciones igual que antes, usando data.presidentes si existe
+      const listaPresidentes = data.presidentes || data
       const inicial = {}
-      data.forEach((p) => {
+      listaPresidentes.forEach((p) => {
         inicial[p.id] = { nombre: p.nombre, descripcion: p.descripcion }
       })
       setEdiciones(inicial)
-
       setLoading(false)
     } catch (err) {
       if (loading) {
@@ -137,6 +137,76 @@ const PresidentesList = () => {
     }
   }
 
+  const handleDelete = async (id) => {
+    const confirm = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará el presidente permanentemente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    })
+
+    if (!confirm.isConfirmed) return
+
+    try {
+      const token = window.sessionStorage.getItem('token')
+      await axios.delete(`${ENDPOINT.presidentes}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      Swal.fire('Eliminado', 'El presidente ha sido eliminado', 'success')
+      fetchPresidentes()
+    } catch (err) {
+      Swal.fire(
+        'Error',
+        err.response?.data?.message || 'No se pudo eliminar',
+        'error'
+      )
+    }
+  }
+
+  // NUEVA FUNCIÓN PARA ELIMINAR TODOS LOS PRESIDENTES
+  const handleDeleteAll = async () => {
+    const confirm = await Swal.fire({
+      title: '¿Eliminar todos los presidentes?',
+      text: 'Esta acción eliminará permanentemente todos los presidentes. ¡No se puede deshacer!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar todos',
+      cancelButtonText: 'Cancelar'
+    })
+
+    if (!confirm.isConfirmed) return
+
+    try {
+      const token = window.sessionStorage.getItem('token')
+      await axios.delete(`${ENDPOINT.presidentes}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      Swal.fire(
+        'Eliminados',
+        'Todos los presidentes han sido eliminados',
+        'success'
+      )
+      fetchPresidentes()
+    } catch (err) {
+      Swal.fire(
+        'Error',
+        err.response?.data?.message ||
+          'No se pudieron eliminar los presidentes',
+        'error'
+      )
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -150,11 +220,24 @@ const PresidentesList = () => {
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Elecciones Presidenciales
+            {nombreTabla}
           </h1>
           <p className="text-lg text-gray-600">
             {isAdmin ? 'Panel de administración' : 'Vota por tu candidato'}
           </p>
+
+          {/* BOTÓN ELIMINAR TODOS - SOLO ADMIN */}
+          {isAdmin && (
+            <div className="mt-4 mb-6 flex justify-center">
+              <button
+                onClick={handleDeleteAll}
+                className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
+              >
+                Eliminar todos los presidentes
+              </button>
+            </div>
+          )}
+
           <div className="mt-4 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
         </div>
 
@@ -205,6 +288,14 @@ const PresidentesList = () => {
                       className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4 w-full"
                     >
                       Guardar
+                    </button>
+
+                    {/* BOTÓN ELIMINAR */}
+                    <button
+                      onClick={() => handleDelete(p.id)}
+                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full"
+                    >
+                      Eliminar
                     </button>
                   </>
                 ) : (
@@ -306,4 +397,4 @@ const PresidentesList = () => {
   )
 }
 
-export default PresidentesList
+export default VotacionesList

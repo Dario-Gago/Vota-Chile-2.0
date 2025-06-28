@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import PresidentesList from './PresidentesList'
+import VotacionesList from './VotacionesList'
 
 const CountdownToPresidentes = () => {
   const [timeLeft, setTimeLeft] = useState({})
@@ -48,7 +48,7 @@ const CountdownToPresidentes = () => {
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse delay-150"></div>
           </div>
           <div className="mt-8">
-            <PresidentesList />
+            <VotacionesList />
           </div>
         </div>
       </div>
