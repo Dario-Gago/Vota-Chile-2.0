@@ -73,7 +73,7 @@ const CountdownToPresidentes = () => {
         {/* Main heading */}
         <div className="space-y-4">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
-            Votaciones Presidenciales
+            Votaciones
           </h1>
           <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
           <p className="text-lg sm:text-xl text-gray-600 font-medium">
