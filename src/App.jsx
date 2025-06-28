@@ -13,6 +13,7 @@ import Login from './views/Login'
 import Perfil from './views/Profile'
 import Votar from './views/Votar'
 import ProtectedRouteHome from './components/ProtectedRouteHome'
+import ProtectedRouteVotar from './components/ProtectedRouteVotar'
 const App = () => {
   const globalState = useDeveloper()
   useEffect(() => {
@@ -51,7 +52,14 @@ const App = () => {
             }
           />
           <Route path="/perfil" element={<Perfil />} />
-          <Route path="/votar" element={<Votar />} />
+          <Route
+            path="/votar"
+            element={
+              <ProtectedRouteVotar>
+                <Votar />
+              </ProtectedRouteVotar>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </Context.Provider>
