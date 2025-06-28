@@ -29,7 +29,7 @@ Voto en Línea Chile es un proyecto que apuesta por el futuro de la democracia d
 
 ## :sparkles: Funcionalidades
 
-:heavy_check_mark: El administrador puede crear una fecha de lanzamiento de votos;\
+:heavy_check_mark: El administrador puede crear una fecha de lanzamiento para los votos;\
 :heavy_check_mark: El administrador puede crear y eliminar un presidente;\
 :heavy_check_mark: El usuario puede votar;
 
