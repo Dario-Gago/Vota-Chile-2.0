@@ -33,7 +33,7 @@ const login = async (req, res) => {
         rut: usuario.rut
       },
       JWT_SECRET,
-      { expiresIn: '10m' }
+      { expiresIn: '1h' }
     )
 
     res.send({ token, rut: usuario.rut })

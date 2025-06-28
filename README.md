@@ -1,12 +1,62 @@
-# React + Vite
+<h1 align="center">Votachile 2.0</h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  <img alt="Lenguaje principal" src="https://img.shields.io/github/languages/top/{{YOUR_GITHUB_USERNAME}}/votachile-2-0?color=56BEB8">
+  <img alt="Cantidad de lenguajes" src="https://img.shields.io/github/languages/count/{{YOUR_GITHUB_USERNAME}}/votachile-2-0?color=56BEB8">
+  <img alt="Tamaño del repositorio" src="https://img.shields.io/github/repo-size/{{YOUR_GITHUB_USERNAME}}/votachile-2-0?color=56BEB8">
+  <img alt="Licencia" src="https://img.shields.io/github/license/{{YOUR_GITHUB_USERNAME}}/votachile-2-0?color=56BEB8">
+</p>
 
-Currently, two official plugins are available:
+<p align="center">
+  <a href="#dart-acerca-de">Acerca de</a> &#xa0; | &#xa0;
+  <a href="#sparkles-funcionalidades">Funcionalidades</a> &#xa0; | &#xa0;
+  <a href="#rocket-tecnologías">Tecnologías</a> &#xa0; | &#xa0;
+  <a href="#white_check_mark-requisitos">Requisitos</a> &#xa0; | &#xa0;
+  <a href="#checkered_flag-empezar">Empezar</a> &#xa0; | &#xa0;
+  <a href="#memo-licencia">Licencia</a> &#xa0; | &#xa0;
+  <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">Autor</a>
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<br>
 
-## Expanding the ESLint configuration
+## :dart: Acerca de
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Describe aquí tu proyecto
+
+## :sparkles: Funcionalidades
+
+:heavy_check_mark: Funcionalidad 1;\
+:heavy_check_mark: Funcionalidad 2;\
+:heavy_check_mark: Funcionalidad 3;
+
+## :rocket: Tecnologías
+
+Las siguientes herramientas fueron utilizadas en este proyecto:
+
+- [Expo](https://expo.io/)
+- [Node.js](https://nodejs.org/en/)
+- [React](https://es.reactjs.org/)
+- [React Native](https://reactnative.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+
+## :white_check_mark: Requisitos
+
+Antes de comenzar :checkered_flag:, necesitas tener instalados [Git](https://git-scm.com) y [Node.js](https://nodejs.org/en/).
+
+## :checkered_flag: Empezar
+
+```bash
+# Clona este proyecto
+$ git clone https://github.com/{{YOUR_GITHUB_USERNAME}}/votachile-2-0
+
+# Entra al directorio del proyecto
+$ cd votachile-2-0
+
+# Instala las dependencias
+$ yarn
+
+# Ejecuta el proyecto
+$ yarn start
+
+# El servidor se iniciará en <http://localhost:3000>
+```

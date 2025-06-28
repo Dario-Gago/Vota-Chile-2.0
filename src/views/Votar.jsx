@@ -1,10 +1,9 @@
 import React from 'react'
-import PresidentesList from '../components/PresidentesList'
-
+import CountdownToPresidentes from '../components/CountdownToPresidentes'
 const Votar = () => {
   return (
     <div>
-      <PresidentesList></PresidentesList>
+      <CountdownToPresidentes></CountdownToPresidentes>
     </div>
   )
 }
