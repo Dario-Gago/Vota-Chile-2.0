@@ -10,6 +10,49 @@ const VotacionesList = () => {
   const [isAdmin, setIsAdmin] = useState(false)
   const [titulo, setTitulo] = useState('')
   const [nuevoTitulo, setNuevoTitulo] = useState('')
+  const [cantidadCrear, setCantidadCrear] = useState(1)
+
+  const handleCrearPresidentes = async (cantidad) => {
+    if (cantidad < 1) {
+      Swal.fire('Error', 'La cantidad debe ser al menos 1', 'error')
+      return
+    }
+    try {
+      const token = window.sessionStorage.getItem('token')
+      // Se asume que tu backend tiene una ruta POST /presidentes que crea un presidente vacío
+      // Si no existe esa ruta, tendrás que crearla
+
+      // Para crear varios presidentes, puedes llamar la API varias veces o hacer una petición que cree varios a la vez.
+      // Aquí haré varias llamadas con Promise.all para mayor simplicidad
+
+      const promesas = []
+      for (let i = 0; i < cantidad; i++) {
+        promesas.push(
+          axios.post(
+            ENDPOINT.presidentes,
+            { nombre: null, descripcion: null }, // vacío o puedes poner '' si quieres
+            {
+              headers: { Authorization: `Bearer ${token}` }
+            }
+          )
+        )
+      }
+      await Promise.all(promesas)
+      Swal.fire(
+        '¡Hecho!',
+        `${cantidad} presidente(s) creado(s) correctamente`,
+        'success'
+      )
+      fetchPresidentes()
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        error.response?.data?.message || 'Error al crear presidentes',
+        'error'
+      )
+    }
+  }
+
   const obtenerRolUsuario = async () => {
     try {
       const token = window.sessionStorage.getItem('token')
@@ -55,9 +98,6 @@ const VotacionesList = () => {
     fetchPresidentes()
     obtenerRolUsuario()
     obtenerTitulo()
-
-    const interval = setInterval(fetchPresidentes, 10000)
-    return () => clearInterval(interval)
   }, [])
 
   const obtenerTitulo = async () => {
@@ -271,6 +311,55 @@ const VotacionesList = () => {
           ) : (
             <h1 className="text-4xl font-bold text-gray-900 mb-2">{titulo}</h1>
           )}
+          {isAdmin && (
+            <div className="mb-6 flex flex-col items-center space-y-2">
+              <div className="flex flex-col items-center space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Cantidad de presidentes a crear
+                </label>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() =>
+                      setCantidadCrear((prev) => Math.max(1, prev - 1))
+                    }
+                    className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-lg"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    min="1"
+                    max="100"
+                    value={cantidadCrear}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value)
+                      if (!isNaN(value)) {
+                        setCantidadCrear(Math.min(Math.max(value, 1), 100))
+                      } else {
+                        setCantidadCrear(1)
+                      }
+                    }}
+                    className="border border-gray-300 rounded px-3 py-1 w-24 text-center"
+                    placeholder="Cantidad"
+                  />
+                  <button
+                    onClick={() =>
+                      setCantidadCrear((prev) => Math.min(100, prev + 1))
+                    }
+                    className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-lg"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+              <button
+                onClick={() => handleCrearPresidentes(cantidadCrear)}
+                className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+              >
+                Crear presidentes
+              </button>
+            </div>
+          )}
 
           {/* BOTÓN ELIMINAR TODOS - SOLO ADMIN */}
           {isAdmin && (
@@ -360,7 +449,7 @@ const VotacionesList = () => {
                       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span className="font-semibold text-gray-700">
-                      {p.votos.toLocaleString()} votos
+                      {p.votos} votos
                     </span>
                   </div>
                 </div>

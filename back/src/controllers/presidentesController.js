@@ -2,7 +2,8 @@ const {
   getAllPresidentes,
   actualizarPresidente,
   eliminarPresidente,
-  deleteAllPresidentes
+  deleteAllPresidentes,
+  crearPresidenteVacio
 } = require('../models/presidentesModel')
 
 // Controlador para obtener la lista de presidentes
@@ -60,9 +61,19 @@ const eliminarTodosPresidentes = async (req, res) => {
     res.status(500).json({ message: 'Error al eliminar presidentes' })
   }
 }
+const crearPresidenteController = async (req, res) => {
+  try {
+    const nuevoPresidente = await crearPresidenteVacio()
+    res.status(201).json(nuevoPresidente)
+  } catch (error) {
+    console.error('Error al crear presidente:', error)
+    res.status(500).json({ error: 'Error al crear presidente' })
+  }
+}
 module.exports = {
   obtenerPresidentes,
   updatePresidente,
   eliminarPresidenteController,
-  eliminarTodosPresidentes
+  eliminarTodosPresidentes,
+  crearPresidenteController
 }

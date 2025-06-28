@@ -22,9 +22,19 @@ const deleteAllPresidentes = async () => {
   const query = 'DELETE FROM presidentes' // elimina todas las filas
   await pool.query(query)
 }
+const crearPresidenteVacio = async () => {
+  const query = `
+    INSERT INTO presidentes (nombre, descripcion, votos)
+    VALUES ('', '', 0)
+    RETURNING *;
+  `
+  const { rows } = await pool.query(query)
+  return rows[0]
+}
 module.exports = {
   getAllPresidentes,
   actualizarPresidente,
   eliminarPresidente,
-  deleteAllPresidentes
+  deleteAllPresidentes,
+  crearPresidenteVacio
 }

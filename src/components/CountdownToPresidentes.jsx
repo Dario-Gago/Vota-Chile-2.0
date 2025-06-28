@@ -6,7 +6,7 @@ const CountdownToPresidentes = () => {
   const [finished, setFinished] = useState(false)
 
   const calculateTimeLeft = () => {
-    const targetDate = new Date('2025-06-28T15:11:40')
+    const targetDate = new Date('2025-06-28T18:50:40')
     const now = new Date()
     const difference = targetDate - now
 
@@ -34,10 +34,10 @@ const CountdownToPresidentes = () => {
 
   if (finished) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br flex flex-col items-center justify-center p-4">
         <div className="text-center space-y-6 animate-in fade-in duration-1000">
           <div className="relative">
-            <div className="absolute inset-0 bg-green-500 blur-3xl opacity-20 rounded-full"></div>
+            <div className="absolute inset-0  blur-3xl opacity-20 rounded-full"></div>
             <h2 className="relative text-4xl sm:text-5xl lg:text-6xl font-bold text-green-600 mb-2">
               ¡La votación ha comenzado!
             </h2>
