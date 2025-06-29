@@ -1,4 +1,4 @@
-export const URLBASE = 'http://localhost:3000'
+export const URLBASE = 'https://vota-chile-2-0-back.onrender.com'
 export const ENDPOINT = {
   login: `${URLBASE}/login`,
   presidentes: `${URLBASE}/presidentes`,
