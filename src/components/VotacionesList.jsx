@@ -381,16 +381,6 @@ const VotacionesList = () => {
               </div>
             </form>
           </div>
-
-          {/* Botón eliminar todos */}
-          <div className="mt-4 sm:mt-6 flex justify-center">
-            <button
-              onClick={handleDeleteAll}
-              className="bg-red-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl shadow hover:bg-red-700 transition-colors duration-200 text-sm sm:text-base font-medium w-full sm:w-auto max-w-xs"
-            >
-              Eliminar todos los presidentes
-            </button>
-          </div>
         </section>
       )}
     </div>
