@@ -262,6 +262,16 @@ const VotacionesList = () => {
     obtenerTitulo()
   }, [])
 
+  useEffect(() => {
+    if (!isAdmin) {
+      const intervalo = setInterval(() => {
+        fetchPresidentes()
+      }, 5000)
+
+      return () => clearInterval(intervalo)
+    }
+  }, [isAdmin])
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">

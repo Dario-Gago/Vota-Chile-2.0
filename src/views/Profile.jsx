@@ -1,5 +1,5 @@
 import MisVotos from '../components/MisVotos'
-import WelcomeSection from '../components/welcomeSection'
+import WelcomeSection from '../components/WelcomeSection'
 const Profile = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
