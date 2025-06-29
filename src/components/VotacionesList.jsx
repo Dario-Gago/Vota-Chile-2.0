@@ -337,10 +337,10 @@ const VotacionesList = () => {
         </div>
       </div>
       {isAdmin && (
-        <section className="mt-8 bg-white/70 backdrop-blur-sm rounded-3xl shadow-lg p-8 max-w-xl mx-auto border border-blue-100">
+        <section className="mt-8 bg-white/70 backdrop-blur-sm rounded-3xl shadow-lg p-4 sm:p-6 lg:p-8 max-w-xs sm:max-w-md lg:max-w-xl mx-auto border border-blue-100">
           {/* NUEVO formulario para cambiar fecha */}
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+          <div className="mt-4 sm:mt-6 lg:mt-8">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-700 mb-2 text-center sm:text-left">
               Cambiar fecha de votación
             </h3>
             <form
@@ -364,17 +364,17 @@ const VotacionesList = () => {
                 }
               }}
             >
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
                 <input
                   type="datetime-local"
                   value={nuevaFecha}
                   onChange={(e) => setNuevaFecha(e.target.value)}
-                  className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                  className="border border-gray-300 rounded-md px-3 py-2 w-full text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200 text-sm sm:text-base font-medium whitespace-nowrap sm:w-auto w-full"
                 >
                   Guardar
                 </button>
@@ -383,10 +383,10 @@ const VotacionesList = () => {
           </div>
 
           {/* Botón eliminar todos */}
-          <div className="mt-6 flex justify-center">
+          <div className="mt-4 sm:mt-6 flex justify-center">
             <button
               onClick={handleDeleteAll}
-              className="bg-red-600 text-white px-6 py-3 rounded-xl shadow hover:bg-red-700 transition"
+              className="bg-red-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl shadow hover:bg-red-700 transition-colors duration-200 text-sm sm:text-base font-medium w-full sm:w-auto max-w-xs"
             >
               Eliminar todos los presidentes
             </button>
