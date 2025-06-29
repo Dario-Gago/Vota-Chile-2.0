@@ -82,11 +82,11 @@ const Home = () => {
                   {/* Content */}
                   <div className="text-center lg:text-left flex-1">
                     <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                      ¡Votá con un solo{' '}
+                      ¡Vota con un solo{' '}
                       <span className="text-emerald-600">click!</span>
                     </h2>
                     <p className="text-lg sm:text-xl text-gray-600 mb-6 leading-relaxed">
-                      Elegí tu candidato de forma{' '}
+                      Elege tu candidato de forma{' '}
                       <span className="font-medium">rápida</span>,{' '}
                       <span className="font-medium">simple</span> y{' '}
                       <span className="font-medium">segura</span>.

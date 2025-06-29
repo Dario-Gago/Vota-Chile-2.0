@@ -6,15 +6,15 @@ const CrearPresidentes = ({
   handleCrearPresidentes
 }) => {
   return (
-    <div className="mb-8 flex flex-col items-center space-y-4">
-      <label className="text-base font-semibold text-gray-800">
-        Cantidad de presidentes a crear
-      </label>
+    <div className="w-full max-w-xl mx-auto bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 sm:p-8 space-y-6 animate-in fade-in duration-1000">
+      <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-800">
+        Crear presidentes
+      </h2>
 
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center justify-center space-x-4">
         <button
           onClick={() => setCantidadCrear((prev) => Math.max(1, prev - 1))}
-          className="w-12 h-12 flex items-center justify-center rounded-lg bg-blue-100 text-blue-700 font-bold text-2xl shadow-md hover:bg-blue-200 transition"
+          className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-200 text-blue-700 font-bold text-2xl shadow hover:bg-blue-300 transition"
           aria-label="Disminuir cantidad"
           type="button"
         >
@@ -34,14 +34,14 @@ const CrearPresidentes = ({
               setCantidadCrear(1)
             }
           }}
-          className="w-20 text-center rounded-md border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2 text-lg font-medium text-gray-900"
+          className="w-20 text-center rounded-md border border-gray-300 bg-white/90 text-lg font-semibold text-gray-800 px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           placeholder="Cantidad"
           aria-label="Cantidad de presidentes"
         />
 
         <button
           onClick={() => setCantidadCrear((prev) => Math.min(100, prev + 1))}
-          className="w-12 h-12 flex items-center justify-center rounded-lg bg-blue-100 text-blue-700 font-bold text-2xl shadow-md hover:bg-blue-200 transition"
+          className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-200 text-blue-700 font-bold text-2xl shadow hover:bg-blue-300 transition"
           aria-label="Incrementar cantidad"
           type="button"
         >
@@ -49,13 +49,15 @@ const CrearPresidentes = ({
         </button>
       </div>
 
-      <button
-        onClick={() => handleCrearPresidentes(cantidadCrear)}
-        className="mt-2 bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:from-green-600 hover:to-green-700 transition"
-        type="button"
-      >
-        Crear presidentes
-      </button>
+      <div className="pt-2">
+        <button
+          onClick={() => handleCrearPresidentes(cantidadCrear)}
+          className="w-full bg-gradient-to-r from-green-500 to-teal-600 text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:from-green-600 hover:to-teal-700 transition-all duration-300"
+          type="button"
+        >
+          Crear presidentes
+        </button>
+      </div>
     </div>
   )
 }

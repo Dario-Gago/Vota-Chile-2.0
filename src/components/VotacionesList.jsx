@@ -340,9 +340,6 @@ const VotacionesList = () => {
         <section className="mt-8 bg-white/70 backdrop-blur-sm rounded-3xl shadow-lg p-4 sm:p-6 lg:p-8 max-w-xs sm:max-w-md lg:max-w-xl mx-auto border border-blue-100">
           {/* NUEVO formulario para cambiar fecha */}
           <div className="mt-4 sm:mt-6 lg:mt-8">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-700 mb-2 text-center sm:text-left">
-              Cambiar fecha de votación
-            </h3>
             <form
               onSubmit={async (e) => {
                 e.preventDefault()
@@ -363,18 +360,23 @@ const VotacionesList = () => {
                   Swal.fire('Error', 'No se pudo actualizar la fecha', 'error')
                 }
               }}
+              className="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border border-white/20 w-full max-w-xl mx-auto space-y-4"
             >
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 text-center">
+                Cambiar fecha de inicio de la votación
+              </h2>
+
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
                 <input
                   type="datetime-local"
                   value={nuevaFecha}
                   onChange={(e) => setNuevaFecha(e.target.value)}
-                  className="border border-gray-300 rounded-md px-3 py-2 w-full text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/90 shadow-sm"
                   required
                 />
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200 text-sm sm:text-base font-medium whitespace-nowrap sm:w-auto w-full"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 text-sm sm:text-base font-semibold shadow-md"
                 >
                   Guardar
                 </button>

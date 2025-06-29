@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Swal from 'sweetalert2'
 import { ENDPOINT } from '../config/constans'
 import Context from '../contexts/Context'
 import { Link } from 'react-router-dom'
@@ -12,41 +11,36 @@ const initialForm = { email: 'prueba@ejemplo.com', password: '123456' }
 const Login = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState(initialForm)
+  const [errorMessage, setErrorMessage] = useState('')
   const { setDeveloper } = useContext(Context)
 
-  const handleUser = (event) =>
+  const handleUser = (event) => {
     setUser({ ...user, [event.target.name]: event.target.value })
+    setErrorMessage('') // Limpiar el error al escribir
+  }
 
-  const handleForm = (event) => {
+  const handleForm = async (event) => {
     event.preventDefault()
 
     if (!user.email.trim() || !user.password.trim()) {
-      return Swal.fire('Error', 'Email y Contraseña obligatorias.', 'warning')
+      return setErrorMessage('Email y contraseña son obligatorios.')
     }
 
     if (!emailRegex.test(user.email)) {
-      return Swal.fire('Error', 'El formato del email no es correcto!', 'error')
+      return setErrorMessage('El formato del email no es válido.')
     }
 
-    axios
-      .post(ENDPOINT.login, user)
-      .then(({ data }) => {
-        window.sessionStorage.setItem('token', data.token)
-        window.sessionStorage.setItem('rut', data.rut) // ✅ Guardar el rut aquí
-
-        Swal.fire(
-          '¡Éxito!',
-          'Usuario identificado con éxito 😀.',
-          'success'
-        ).then(() => {
-          setDeveloper({}) // Aquí podrías incluso guardar más datos si lo deseas
-          navigate('/perfil')
-        })
-      })
-      .catch(({ response: { data } }) => {
-        console.error(data)
-        Swal.fire('Error', `${data.message} 🙁.`, 'error')
-      })
+    try {
+      const { data } = await axios.post(ENDPOINT.login, user)
+      window.sessionStorage.setItem('token', data.token)
+      window.sessionStorage.setItem('rut', data.rut)
+      setDeveloper({})
+      navigate('/perfil')
+    } catch (err) {
+      console.error(err)
+      const msg = err.response?.data?.message || 'Error al iniciar sesión.'
+      setErrorMessage(msg)
+    }
   }
 
   return (
@@ -58,6 +52,13 @@ const Login = () => {
         Iniciar Sesión
       </h1>
       <hr className="mb-6" />
+
+      {errorMessage && (
+        <div className="mb-4 p-3 text-red-600 bg-red-100 border border-red-300 rounded-lg">
+          {errorMessage}
+        </div>
+      )}
+
       <div className="mb-4">
         <label className="block text-gray-700 font-medium mb-1">
           Email address
