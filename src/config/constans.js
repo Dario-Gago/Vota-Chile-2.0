@@ -9,5 +9,6 @@ export const ENDPOINT = {
   votar: `${URLBASE}/votar`,
   misVotos: (rut) => `${URLBASE}/votar/${rut}`,
   logoutAuto: `${URLBASE}/logout-auto`,
-  titulo: `${URLBASE}/api/titulo`
+  titulo: `${URLBASE}/api/titulo`,
+  fecha: `${URLBASE}/fecha`
 }

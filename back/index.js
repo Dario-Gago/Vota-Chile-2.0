@@ -11,6 +11,7 @@ const statusRoutes = require('./routes/status.routes')
 const votarRoutes = require('./routes/votaciones.routes')
 const logoutRoutes = require('./routes/logout.routes')
 const tituloRoutes = require('./routes/titulo.routes')
+const fechaRoutes = require('./routes/fecha.routes')
 
 app.use(cors())
 app.use(express.json())
@@ -21,6 +22,7 @@ app.use('/status', statusRoutes)
 app.use('/votar', votarRoutes)
 app.use('/logout-auto', logoutRoutes)
 app.use('/api/titulo', tituloRoutes)
+app.use('/fecha', fechaRoutes)
 
 app.listen(
   PORT,

@@ -16,6 +16,7 @@ const VotacionesList = () => {
   const [titulo, setTitulo] = useState('')
   const [nuevoTitulo, setNuevoTitulo] = useState('')
   const [cantidadCrear, setCantidadCrear] = useState(1)
+  const [nuevaFecha, setNuevaFecha] = useState('')
 
   const handleCrearPresidentes = async (cantidad) => {
     if (cantidad < 1) {
@@ -335,6 +336,63 @@ const VotacionesList = () => {
           <EstadisticasVotacion presidentes={presidentes} />
         </div>
       </div>
+      {isAdmin && (
+        <section className="mt-8 bg-white/70 backdrop-blur-sm rounded-3xl shadow-lg p-8 max-w-xl mx-auto border border-blue-100">
+          {/* NUEVO formulario para cambiar fecha */}
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+              Cambiar fecha de votación
+            </h3>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault()
+                try {
+                  const token = window.sessionStorage.getItem('token')
+                  await axios.put(
+                    ENDPOINT.fecha,
+                    { fecha_inicio: nuevaFecha },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                  )
+                  Swal.fire(
+                    'Éxito',
+                    'Fecha actualizada correctamente',
+                    'success'
+                  )
+                } catch (error) {
+                  console.error('Error al actualizar fecha:', error)
+                  Swal.fire('Error', 'No se pudo actualizar la fecha', 'error')
+                }
+              }}
+            >
+              <div className="flex items-center space-x-4">
+                <input
+                  type="datetime-local"
+                  value={nuevaFecha}
+                  onChange={(e) => setNuevaFecha(e.target.value)}
+                  className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                >
+                  Guardar
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* Botón eliminar todos */}
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={handleDeleteAll}
+              className="bg-red-600 text-white px-6 py-3 rounded-xl shadow hover:bg-red-700 transition"
+            >
+              Eliminar todos los presidentes
+            </button>
+          </div>
+        </section>
+      )}
     </div>
   )
 }
