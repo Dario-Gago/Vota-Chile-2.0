@@ -11,6 +11,19 @@ const WelcomeSection = () => {
   const [loading, setLoading] = useState(true)
   const [isOnline, setIsOnline] = useState(true) // Inicializar en false hasta obtener del backend
   const [statusLoading, setStatusLoading] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  const obtenerRolUsuario = async () => {
+    try {
+      const token = window.sessionStorage.getItem('token')
+      const { data } = await axios.get(`${ENDPOINT.users}/info`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setIsAdmin(data.admin)
+    } catch (err) {
+      console.error('Error al obtener info del usuario', err)
+    }
+  }
 
   // Función para obtener el status desde el backend
   const getOnlineStatus = async () => {
@@ -74,6 +87,7 @@ const WelcomeSection = () => {
 
   useEffect(() => {
     getDeveloperData()
+    obtenerRolUsuario()
   }, [])
 
   if (loading) {
@@ -105,6 +119,10 @@ const WelcomeSection = () => {
                     </h1>
                     <p className="text-blue-100 text-lg">
                       {getDeveloper?.nombre_usuario}
+                    </p>
+                    {/* Mostrar el rol */}
+                    <p className="text-blue-200 text-sm italic">
+                      Rol: {isAdmin ? 'Administrador' : 'Usuario'}
                     </p>
                   </div>
                 </div>

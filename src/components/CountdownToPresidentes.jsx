@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+
 import VotacionesList from './VotacionesList'
+import { ENDPOINT } from '../config/constans'
 
 const CountdownToPresidentes = () => {
   const [timeLeft, setTimeLeft] = useState({})
   const [finished, setFinished] = useState(false)
+  const [usuariosConectados, setUsuariosConectados] = useState(0)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   const calculateTimeLeft = () => {
     const targetDate = new Date('2025-06-28T18:50:40')
@@ -22,10 +27,38 @@ const CountdownToPresidentes = () => {
       segundos: Math.floor((difference / 1000) % 60)
     }
   }
+  const fetchUsuariosConectados = async () => {
+    const token = window.sessionStorage.getItem('token')
+    if (!token) return // Si no hay token no hacemos nada
 
+    try {
+      const response = await axios.get(ENDPOINT.totalUsuariosConectados, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      setUsuariosConectados(response.data.total)
+    } catch (error) {
+      console.error('Error al obtener usuarios conectados:', error)
+    }
+  }
+  const obtenerRolUsuario = async () => {
+    try {
+      const token = window.sessionStorage.getItem('token')
+      const { data } = await axios.get(`${ENDPOINT.users}/info`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setIsAdmin(data.admin)
+    } catch (err) {
+      console.error('Error al obtener info del usuario', err)
+    }
+  }
   useEffect(() => {
+    obtenerRolUsuario()
     const timer = setInterval(() => {
       const time = calculateTimeLeft()
+      fetchUsuariosConectados()
+
       setTimeLeft(time)
     }, 1000)
 
@@ -41,6 +74,13 @@ const CountdownToPresidentes = () => {
             <h2 className="relative text-4xl sm:text-5xl lg:text-6xl font-bold text-green-600 mb-2">
               ¡La votación ha comenzado!
             </h2>
+            {isAdmin ? (
+              <span className="ml-4 text-sm text-green-600 font-semibold">
+                Usuarios conectados: {usuariosConectados}
+              </span>
+            ) : (
+              ''
+            )}
           </div>
           <div className="flex items-center justify-center space-x-2 text-green-500">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>

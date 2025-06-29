@@ -19,8 +19,19 @@ const actualizarStatusPorId = async (id, status) => {
     throw { code: 404, message: 'Usuario no encontrado' }
   return result.rows[0]
 }
+const obtenerTotalStatus = async () => {
+  const result = await pool.query(
+    'SELECT COUNT(*) FROM usuarios WHERE status = TRUE'
+  )
+  const total = parseInt(result.rows[0].count, 10) // count viene como string
+  if (total === 0) {
+    throw { code: 404, message: 'No hay usuarios conectados' }
+  }
+  return total // Devuelve solo el número total
+}
 
 module.exports = {
   obtenerStatusPorId,
-  actualizarStatusPorId
+  actualizarStatusPorId,
+  obtenerTotalStatus
 }
