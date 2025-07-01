@@ -300,7 +300,7 @@ const VotacionesList = () => {
             actualizarTitulo={actualizarTitulo}
             isAdmin={isAdmin}
           />
-
+          <hr />
           {isAdmin && (
             <section className="mt-8 bg-white/70 backdrop-blur-sm rounded-3xl shadow-lg p-8 max-w-xl mx-auto border border-blue-100">
               <CrearPresidentes
