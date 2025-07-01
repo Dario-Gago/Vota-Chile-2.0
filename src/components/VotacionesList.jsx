@@ -288,7 +288,7 @@ const VotacionesList = () => {
 
       <div className="relative max-w-7xl mx-auto">
         {/* Header */}
-        <header className="text-center mb-12">
+        <header className="w-full text-center mb-12">
           <p className="text-lg text-gray-600 font-semibold tracking-wide mb-2">
             {isAdmin ? 'Panel de administración' : 'Vota por tu candidato'}
           </p>
@@ -301,24 +301,6 @@ const VotacionesList = () => {
             isAdmin={isAdmin}
           />
           <hr />
-          {isAdmin && (
-            <section className="mt-8 bg-white/70 backdrop-blur-sm rounded-3xl shadow-lg p-8 max-w-xl mx-auto border border-blue-100">
-              <CrearPresidentes
-                cantidadCrear={cantidadCrear}
-                setCantidadCrear={setCantidadCrear}
-                handleCrearPresidentes={handleCrearPresidentes}
-              />
-
-              <div className="mt-6 flex justify-center">
-                <button
-                  onClick={handleDeleteAll}
-                  className="bg-red-600 text-white px-6 py-3 rounded-xl shadow hover:bg-red-700 transition"
-                >
-                  Eliminar todos los presidentes
-                </button>
-              </div>
-            </section>
-          )}
 
           <div className="mt-6 h-1 w-28 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full mx-auto" />
         </header>
@@ -340,14 +322,33 @@ const VotacionesList = () => {
             />
           ))}
         </section>
+        {isAdmin && (
+          <section className="mt-8 bg-white/70 backdrop-blur-sm rounded-3xl shadow-lg p-8 w-full mx-auto border border-blue-100">
+            <CrearPresidentes
+              cantidadCrear={cantidadCrear}
+              setCantidadCrear={setCantidadCrear}
+              handleCrearPresidentes={handleCrearPresidentes}
+            />
+
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={handleDeleteAll}
+                className="bg-red-600 text-white px-6 py-3 rounded-xl shadow hover:bg-red-700 transition"
+              >
+                Eliminar todos los presidentes
+              </button>
+            </div>
+          </section>
+        )}
 
         {/* Estadísticas */}
-        <div className="mt-14 max-w-4xl mx-auto">
+        {/* Estadísticas */}
+        <div className="mt-14 w-full">
           <EstadisticasVotacion presidentes={presidentes} />
         </div>
       </div>
       {isAdmin && (
-        <section className="mt-8 bg-white/70 backdrop-blur-sm rounded-3xl shadow-lg p-4 sm:p-6 lg:p-8 max-w-xs sm:max-w-md lg:max-w-xl mx-auto border border-blue-100">
+        <section className="mt-8 bg-white/70 backdrop-blur-sm rounded-3xl shadow-lg p-4 sm:p-6 lg:p-8 w-full mx-auto border border-blue-100">
           {/* NUEVO formulario para cambiar fecha */}
           <div className="mt-4 sm:mt-6 lg:mt-8">
             <form
@@ -370,7 +371,7 @@ const VotacionesList = () => {
                   Swal.fire('Error', 'No se pudo actualizar la fecha', 'error')
                 }
               }}
-              className="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border border-white/20 w-full max-w-xl mx-auto space-y-4"
+              className="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border border-white/20 w-full mx-auto space-y-4"
             >
               <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 text-center">
                 Cambiar fecha de inicio de la votación
